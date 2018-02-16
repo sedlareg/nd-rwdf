@@ -1,0 +1,13 @@
+$vendors: "-moz-", "-webkit-", "";
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+  @if $inset {
+    @each $vendor in $vendors {
+      #{$vendor}box-shadow: inset $top $left $blur $color;
+    }
+  } @else {
+    @each $vendor in $vendors {
+      #{$vendor}box-shadow: $top $left $blur $color;
+    }
+  }
+}
