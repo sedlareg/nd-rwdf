@@ -8,7 +8,7 @@ $> npm i
 
 ## Build
 ```bash
-$>
+$> npm run build
 ```
 
 ## Toolchain:
