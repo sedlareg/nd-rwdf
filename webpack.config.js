@@ -1,25 +1,33 @@
+const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// Create multiple instances
-const extractCSS = new ExtractTextPlugin(
-    {
-        filename: 'dist/[name].bundle.css',
-        allChunks: true,
-    }
-);
-const extractSASS = new ExtractTextPlugin(
-    {
-        filename: 'dist/styles/main.css',
-        allChunks: true,
-    }
-);
+const PATHS = {
+    app: path.join(__dirname, "app"),
+    dist: path.join(__dirname, "dist")
+};
+
+const extractSASS = new ExtractTextPlugin({
+    filename: 'styles/main.css',
+    allChunks: true
+});
+
+const htmlWebPack = new HtmlWebpackPlugin({
+    filename: 'index.html',
+    template: 'app/template.html'
+});
 
 module.exports = {
-    entry:  ['./src/scss/main.scss'],
+    context: __dirname,
+    entry: path.join(PATHS.app, 'scss/main.scss'),
     output: {
-         filename: 'dist/index.js'
+        path: PATHS.dist,
+        filename: 'index.js'
     },
+    devServer: {
+        inline: true
+    },
+    watch: false,
     module: {
         rules: [
             {
@@ -29,29 +37,37 @@ module.exports = {
                     use: [
                         {
                             loader: 'css-loader',
-                            options: {
-                                url: false,
-                                minimize: true,
-                                sourceMap: true
-                            }
+                            options: {url: false, minimize: true, sourceMap: true}
                         },
                         {
                             loader: 'sass-loader',
-                            options: {
-                                sourceMap: true
-                            }
+                            options: {sourceMap: true}
                         }
                     ]
                 })
+            },
+            {
+                test: /\.(html)$/,
+                use: {
+                    loader: 'html-loader',
+                    options: {
+                        minimize: false,
+                        removeComments: true,
+                        collapseWhitespace: false
+                    }
+                }
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'images/[name].[ext]'
+                }
             }
         ]
     },
     plugins: [
-        extractCSS,
         extractSASS,
-        new CopyWebpackPlugin([
-            { from: 'src/images', to: 'dist/images' },
-            { from: 'src/index.html', to: 'dist/index.html' }
-        ], {debug: true})
-    ],
+        htmlWebPack
+    ]
 };
