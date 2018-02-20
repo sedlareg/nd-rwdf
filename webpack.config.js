@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require("webpack");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -17,9 +18,14 @@ const htmlWebPack = new HtmlWebpackPlugin({
     template: 'app/template.html'
 });
 
+const uglifyJs = new webpack.optimize.UglifyJsPlugin({minimize: true});
+
 module.exports = {
     context: __dirname,
-    entry: path.join(PATHS.app, 'scss/main.scss'),
+    entry: [
+        path.join(PATHS.app, 'scss/main.scss'),
+        path.join(PATHS.app, 'index.js')
+    ],
     output: {
         path: PATHS.dist,
         filename: 'index.js'
@@ -41,7 +47,7 @@ module.exports = {
                         },
                         {
                             loader: 'sass-loader',
-                            options: {sourceMap: true}
+                            options: {sourceMap: true, minimize: true}
                         }
                     ]
                 })
@@ -51,9 +57,9 @@ module.exports = {
                 use: {
                     loader: 'html-loader',
                     options: {
-                        minimize: false,
+                        minimize: true,
                         removeComments: true,
-                        collapseWhitespace: false
+                        collapseWhitespace: true
                     }
                 }
             },
@@ -68,6 +74,7 @@ module.exports = {
     },
     plugins: [
         extractSASS,
-        htmlWebPack
+        htmlWebPack,
+        uglifyJs
     ]
 };

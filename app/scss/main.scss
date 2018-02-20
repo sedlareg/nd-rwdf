@@ -1,6 +1,15 @@
 @import 'variables';
 @import "mixins";
 
+/* zocial */
+[class*="fontawesome-"]:before {
+  font-family: 'FontAwesome', sans-serif;
+  margin-right: 10px;
+  text-shadow: 4px 2px 4px #000;
+  color: white;
+  display: inline-block;
+}
+
 body, html {
   margin: 0;
   padding: 0;
@@ -10,7 +19,7 @@ body, html {
 
 body {
   font-family: $font-stack;
-  font-size: 12px;
+  font-size: 1em;
   color: $font-color;
 }
 
@@ -51,27 +60,62 @@ ul {
   @include box-shadow(0, 2px, 5px, $header-shadow-color);
   min-height: 56px;
   transition: min-height 0.3s;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.menu {
+  display: none;
+  cursor: pointer;
+  @media only screen and (max-width: 479px) {
+    display: block;
+    width: calc(25% - 5px);
+    text-align: right;
+    margin-right: 5px;
+  }
+  svg {
+    width: 40px;
+    fill: #33b679;
+  }
 }
 
 .header__inner {
-  width: 800px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
+  @media only screen and (max-width: 479px) {
+    width: 75%;
+  }
 }
 
 .header__logo {
   height: 72px;
   margin-right: 1em;
   vertical-align: top;
-  margin-top: 12px;
+  margin-top: 1em;
+  @media only screen and (max-width: 479px) {
+    height: 50px;
+  }
 }
 
 .header__title {
   font-weight: 300;
-  font-size: 4em;
-  margin: 0.5em 0.25em;
+  font-size: 3.5em;
+  margin: .4em .25em;
   display: inline-block;
   color: $header-title-color;
+  @media only screen and (max-width: 479px) {
+    font-size: 1em;
+    line-height: 6em;
+    margin: 0;
+  }
+  @include respond-to(medium-screens) {
+    font-size: 2em;
+    line-height: 3em;
+  }
+  @include respond-to(wide-screens) {
+  }
 }
 
 /*
@@ -81,16 +125,19 @@ ul {
  */
 
 .nav {
-  width: 800px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  a {
-    text-decoration: none;
-    color: $link-color;
-    &:hover {
-      text-decoration: underline;
-      color: $link-hover-color;
-    }
+  z-index: 2;
+  &.open {
+    transform: translate(0, 0);
+  }
+  @media only screen and (max-width: 479px) {
+    width: 100%;
+    position: absolute;
+    background-color: #78909C;
+    transform: translate(500px, 0);
+    transition: transform .3s ease;
   }
 }
 
@@ -98,16 +145,65 @@ ul {
   width: 100%;
   padding: 0;
   margin: 0;
-}
+  a {
+    text-decoration: none;
+    color: $link-color;
+    padding: 1.5em;
+    &:hover {
+      text-decoration: underline;
+      color: $link-hover-color;
+    }
+  }
+  li {
+    &.nav__item {
+      box-sizing: border-box;
+      display: inline-block;
+      width: 24%;
+      text-align: center;
+      line-height: 24px;
+      padding: 24px;
+      text-transform: uppercase;
+      a {
+        span {
+          &[class*="fontawesome-"] {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 479px) {
+    li {
+      &.nav__item {
+        display: block;
+        padding: 0;
+        width: 100%;
+        a {
+          span {
+            &[class*="fontawesome-"] {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+    a {
+      background-color: #33B679;
+      color: white;
+      display: block;
+      font-weight: 600;
+      text-decoration: none;
+      &:hover {
+        background-color: #d42224;
+        text-decoration: none;
+      }
 
-.nav__item {
-  box-sizing: border-box;
-  display: inline-block;
-  width: 24%;
-  text-align: center;
-  line-height: 24px;
-  padding: 24px;
-  text-transform: uppercase;
+      &:active {
+        background-color: #5accc7;
+        color: white;
+      }
+    }
+  }
 }
 
 /*
@@ -118,7 +214,7 @@ ul {
 
 main {
   @include box-shadow(0, 2px, 5px, $main-shadow-color);
-  width: 800px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -129,6 +225,10 @@ main {
  *
  */
 
+.content {
+  display: flex;
+  flex-wrap: wrap;
+}
 /*
  *
  * Hero
@@ -136,12 +236,12 @@ main {
  */
 
 .hero {
-  float: left;
-  width: 480px;
+  width: 100%;
   position: relative;
   background-image: url($hero-image);
   background-size: cover;
-  height: 300px;
+  min-height: 300px;
+  order: 1;
   article {
     box-sizing: border-box;
     background-color: $article-bg-color;
@@ -153,6 +253,9 @@ main {
     color: $article-font-color;
     padding: 1em;
   }
+  @media only screen and (min-width: 721px) {
+    width:  50vw;
+  }
 }
 
 /*
@@ -162,11 +265,13 @@ main {
  */
 
 .top-news {
-  float: right;
-  width: 320px;
-  height: 300px;
+  width: 100%;
   border-bottom: $topnews-border-bottom;
   padding: 1em;
+  order: 2;
+  @media only screen and (min-width: 721px){
+    order: 3;
+  }
 }
 
 .news__title {
@@ -189,6 +294,8 @@ main {
   a {
     text-decoration: none;
     color: $topnews-link-color;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
     &:hover, &:active {
       text-decoration: underline;
     }
@@ -202,9 +309,10 @@ main {
  */
 
 .scores {
-  width: 480px;
-  float: left;
+  width: 100%;
   padding-top: 1em;
+  order: 3;
+  border-bottom: 1px solid silver;
 }
 
 .scores__table {
@@ -218,24 +326,27 @@ main {
     font-weight: 300;
     background-color: $scores-th-bg-color;
   }
-  td{
+  td {
     &.winner {
       font-weight: bold;
     }
     &:nth-child(3) {
       text-align: right;
     }
-    &:nth-child(2),&:nth-child(5) {
+    &:nth-child(2), &:nth-child(5) {
       text-align: center;
     }
   }
-  tr{
+  tr {
     &:nth-child(odd) td {
       background-color: $scores-tr-odd-bg-color;
     }
     &:nth-child(even) td {
       background-color: $scores-tr-even-bg-color;
     }
+  }
+  @media only screen and (min-width: 721px){
+    order: 4;
   }
 }
 
@@ -246,9 +357,13 @@ main {
  */
 
 .weather {
-  float: right;
-  width: 320px;
+  width: 100%;
   padding: 1em;
+  order: 4;
+  @media only screen and (min-width: 721px){
+    width: calc(50vw - 2em);
+    order: 2;
+  }
 }
 
 .weather__location {
@@ -295,13 +410,14 @@ main {
 
 /*
  *
- * Weather
+ * Recent News
  *
  */
 
 .recent-news {
-  clear: both;
+  width: 100%;
   padding: 1em;
+  order: 5;
 }
 
 .snippet {
@@ -320,6 +436,8 @@ main {
   a {
     text-decoration: none;
     color: #666;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
     &:hover, &:active {
       text-decoration: underline;
     }
