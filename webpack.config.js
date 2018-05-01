@@ -43,11 +43,11 @@ module.exports = {
                     use: [
                         {
                             loader: 'css-loader',
-                            options: {url: false, minimize: true, sourceMap: true}
+                            options: {url: false, minimize: false, sourceMap: true}
                         },
                         {
                             loader: 'sass-loader',
-                            options: {sourceMap: true, minimize: true}
+                            options: {sourceMap: true, minimize: false}
                         }
                     ]
                 })
